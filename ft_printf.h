@@ -17,7 +17,8 @@
 int ft_printf(const char *format, ...);
 int is_special(char c);
 ssize_t print_c(char c);
-ssize_t print_p(void *p);
+ssize_t print_di(int num);
+ssize_t print_p(void *addr);
 ssize_t print_s(const char* str);
 size_t print_special(char c, va_list *args);
 

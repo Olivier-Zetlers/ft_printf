@@ -1,26 +1,38 @@
 #include "ft_printf.h"
 
-ssize_t put_nbr(uintptr_t addr, int *counter);
+void put_addr(uintptr_t addr, int *counter);
 
-ssize_t print_p(void *p)
+ssize_t print_p(void *addr)
 {
 	int counter;
 
-	counter = 0;
-	uintptr_t tmp = (uintptr_t) p;
-	return (put_nbr(tmp, &counter));
+	// STEP 1: print prefix 0x
+	write(1, "0x", 2);
+
+	// STEP 2: print address in hex
+	counter = 2; // Due to step 1
+	uintptr_t tmp = (uintptr_t) addr;
+	put_addr(tmp, &counter);
+	return (counter);
 }
 
-ssize_t put_nbr(uintptr_t addr, int *counter)
+void put_addr(uintptr_t addr, int *counter)
 {
 	char	c;
+	char	*hex = "0123456789abcdef";
 	int	tmp;
 
-	if (addr > 9)
-		put_nbr(addr / 10, counter);
-	c = '0' + (addr % 10);
+	if ((addr > 15) && (*counter >= 0))
+		put_addr(addr / 16, counter);
+	else if (*counter < 0)
+		return;
+	c = hex[addr % 16];
 	tmp = write(1, &c, 1);
-	if (temp < 0)
-		
-		return (-1);
+	if (tmp >= 0)
+		*counter +=tmp;
+	else
+	{
+		*counter = -1;
+		return;
+	}
 }	

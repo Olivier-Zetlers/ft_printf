@@ -28,7 +28,7 @@ int ft_printf(const char *format, ...)
 			}
 			// SOUS-CAS 1b : le % n'est pas suivi d'un caractère spécial => imprimer % et incrément i de 1 (fait ds 'if' CAS 1a) 
 			else	
-				write(1, "%", 1);
+				write(1, "%", 1); // A PRIORI,  CAS INUTILE CAR GNU printf non compilable avec un % isolé
 		}
 		// CAS 2 : Le caractère n'est pas un '%' -> imprimer caractèere et incrémenter i (fait ds 'if' CAS 1)
 		else
