@@ -1,11 +1,11 @@
 #include "ft_printf.h"
 
-int is_special(char c)
+int	is_special(char c)
 {
-	char *str;
-	int i; 
+	char	*str;
+	int	i;
 
-	str = CONVERSION_SPECIFIERS; // Replaced by "cspdiuxX%"
+	str = CONVERSION_SPECIFIERS;
 	i = 0;
 	while (str[i])
 	{

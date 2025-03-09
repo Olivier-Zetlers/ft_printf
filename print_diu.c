@@ -1,17 +1,26 @@
 #include "ft_printf.h"
 
-void put_nbr(long num, int *counter);
+void	put_nbr(long num, int *counter);
 
-ssize_t print_di(int num)
+ssize_t	print_di(int num)
 {
-	int counter;
+	int	counter;
 
 	counter = 0;
 	put_nbr((long) num, &counter);
 	return (counter);
 }
 
-void put_nbr(long num, int *counter)
+ssize_t	print_u(unsigned int num)
+{
+	int	counter;
+
+	counter = 0;
+	put_nbr((long) num, &counter);
+	return (counter);
+}
+
+void	put_nbr(long num, int *counter)
 {
 	char	c;
 	ssize_t	temp;
@@ -22,9 +31,9 @@ void put_nbr(long num, int *counter)
 		num *= -1;
 	}
 	if ((num > 9) && (*counter >= 0))
-		put_nbr(num/10, counter);
+		put_nbr(num / 10, counter);
 	else if (*counter < 0)
-		return;
+		return ;
 	c = '0' + (num % 10);
 	temp = write(1, &c, 1);
 	if (temp >= 0)
@@ -32,7 +41,6 @@ void put_nbr(long num, int *counter)
 	else
 	{
 		*counter = -1;
-		return;
+		return ;
 	}
 }
-	
