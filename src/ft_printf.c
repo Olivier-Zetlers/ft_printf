@@ -1,10 +1,11 @@
 #include "ft_printf.h"
 
+
 ssize_t	handle_special(const char *format, size_t *i, va_list *args);
 
 int	ft_printf(const char *format, ...)
 {
-	ssize_t		check;
+	int		check;
 	size_t		i;
 	size_t		counter;
 	va_list		args;
@@ -16,7 +17,7 @@ int	ft_printf(const char *format, ...)
 	{
 		if (format[i] == '%')
 		{
-			check = handle_special(format + i, &i, &args);
+			check = handle_special(format, &i, &args);
 			if (check < 0)
 				return (PRINT_SPECIAL_FAILED);
 			counter += check;
@@ -33,5 +34,8 @@ ssize_t	handle_special(const char *format, size_t *i, va_list *args)
 	if (is_special(format[++(*i)]))
 		return (print_special(format[(*i)++], args));
 	else
+	{
+		(*i)++;
 		return (write(1, "%", 1));
-}
+	}
+}		

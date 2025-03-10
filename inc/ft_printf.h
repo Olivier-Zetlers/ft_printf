@@ -4,7 +4,7 @@
 # include <stddef.h> // For size_t
 # include <stdint.h> // For uintptr_t
 # include <unistd.h> // For write() and ssize_t
-# include "libft/libft.h"
+# include "../libft/inc/libft.h"
 # define PRINT_SPECIAL_FAILED -1 // ERROR CODE
 # define CONVERSION_SPECIFIERS "cspdiuxX%" // conversion specifiers handledi
 

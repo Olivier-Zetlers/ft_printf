@@ -11,7 +11,7 @@ void	put_hex(uintptr_t val, int *counter, int flag)
 	hex_upper = "0123456789ABCDEF";
 	if ((val > 15) && (*counter >= 0))
 		put_hex(val / 16, counter, flag);
-	else if (*counter < 0)
+	if (*counter < 0)
 		return ;
 	if (flag == 0)
 		c = hex_lower[val % 16];

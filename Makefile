@@ -1,47 +1,88 @@
-# Compiler and flags
-CC      = cc
-CFLAGS  = -Wall -Werror -Wextra
-AR      = ar -crs
-RM      = rm -f
+# --------------------------------------------------
+# Makefile template for building a static library
+# Author: OZ
+# --------------------------------------------------
 
-# Program name
-NAME    = libftprintf.a
 
-# External library
-LIBFT_DIR = ./libft
-LIBFT = $(LIBFT_DIR)/libft.a
+#===================================================
+#			VARIABLES
+#===================================================
 
-# Source and object files
-SRCS    = ft_printf.c is_special.c print_c.c print_diu.c print_p.c print_percent.c print_s.c print_special.c print_xX.c put_hex.c
-OBJS    = $(SRCS:.c=.o)
+# Preprocessor
+CPPFLAGS	= -I$(HDR_DIR)
 
-# Default rule: Build the library
-all: $(NAME)
+# Compiler
+CC		= cc
+CFLAGS		= -Wall -Wextra -Werror
 
-# Create the static library
-$(NAME): $(OBJS) $(LIBFT)
-	$(AR) $(NAME) $(OBJS) $(LIBFT)
+# Linker
+LDFLAGS		=
+LDLIBS		=
 
-# Ensure libft.a is built
-$(LIBFT):
-	$(MAKE) -C $(LIBFT_DIR) # Equivalent to cd libft && make
+# Archiver
+AR		= ar
+ARFLAGS		= rcs
 
-# Compile source files into object files
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+# Sources & objects
+SRC_DIR		= src
+SRC		= $(strip $(SRC_DIR)/ft_printf.c $(SRC_DIR)/is_special.c $(SRC_DIR)/print_c.c $(SRC_DIR)/print_diu.c	\
+		  $(SRC_DIR)/print_p.c $(SRC_DIR)/print_percent.c  $(SRC_DIR)/print_s.c  $(SRC_DIR)/print_special.c	\
+		  $(SRC_DIR)/print_xX.c $(SRC_DIR)/put_hex.c)
 
-# Remove object files
-clean:
-	$(RM) $(OBJS)
+OBJ_DIR		= obj
+OBJ		= $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
-# Remove object files and the library
-fclean: clean
-	$(RM) $(NAME)
-	$(MAKE) -C $(LIBFT_DIR) fclean # Runs fclean in libft/ 
+# Headers
+HDR_DIR		= inc
+HDR		= $(HDR_DIR)/ft_printf.h
 
-# Rebuild everything
-re: fclean all
+# External library (libft)
+LIBFT_DIR	= libft
+LIBFT		= $(LIBFT_DIR)/libft.a
+LIBFT_OBJ	= $(LIBFT_DIR)/$(OBJ_DIR)/*.o
 
-# Phony targets (to prevent conflicts with files of the same name)
+# File remover
+RM		= rm
+RMFLAGS		= -fr
+
+# Default goal
+NAME		= libftprintf.a
+
+#===================================================
+#			RULES
+#===================================================
+
+# Default goal set as phony target "all"
+all : $(NAME)
+
+# Static library creation
+$(NAME) : $(OBJ) $(LIBFT)
+	$(AR) $(ARFLAGS) $@ $(OBJ) $(LIBFT_OBJ)
+
+# Creating libft object files
+$(LIBFT) : | $(LIBFT_DIR)
+	$(MAKE) -C $(LIBFT_DIR)
+
+# Compilation-only command
+$(OBJ_DIR)/%.o : $(SRC_DIR)/%.c $(HDR) | $(OBJ_DIR) 		# Don't forget header file as dependency
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@ 		# Whitespace forbidden between $(CPPFLAGS) and $(HDR_DIR)
+
+# Object file directory creation
+$(OBJ_DIR) :
+	mkdir -p $@
+
+# Clean rule
+clean :
+	$(MAKE) -C $(LIBFT_DIR) clean
+	$(RM) $(RMFLAGS) $(OBJ_DIR)
+
+# Fclean rule
+fclean : clean
+	make -C $(LIBFT_DIR) fclean
+	$(RM) $(RMFLAGS) $(NAME)
+
+# re rule
+re : fclean all
+	
+# Phony target declaration directive
 .PHONY: all clean fclean re
-
